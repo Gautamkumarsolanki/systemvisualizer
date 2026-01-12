@@ -11,14 +11,11 @@ const NodeConfigModal = ({ isOpen, onClose, title }: Modal) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={onClose}
-      />
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/50" />
 
       {/* Modal */}
       <div className="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
-        {/* Header */}
         {title && (
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">{title}</h2>
@@ -30,6 +27,7 @@ const NodeConfigModal = ({ isOpen, onClose, title }: Modal) => {
             </button>
           </div>
         )}
+
       </div>
     </div>
   );

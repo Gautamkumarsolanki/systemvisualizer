@@ -1,5 +1,5 @@
 'use client';
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import '@xyflow/react/dist/style.css';
 
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, Background, ReactFlowProvider } from '@xyflow/react';
@@ -7,8 +7,12 @@ import { useSystemContext } from '../providers/SystemContext';
 import nodeTypes from '@/components/Nodes/NodeTypes';
 import NodeSidebar from './toolbar';
 import DnDProvider from '../providers/DnDProvider';
+import { useModalContext } from '../providers/ModalContext';
+import NodeConfigModal from '@/components/Modal/NodeConfigModal';
 
 export default function Home() {
+    
+    const {isOpen,onClose}=useModalContext();
 
     const { edges, nodes, setEdges, setNodes } = useSystemContext();
 
@@ -30,6 +34,7 @@ export default function Home() {
         <ReactFlowProvider>
             <DnDProvider>
                 <div className='react-flow-wrapper' style={{ width: '100vw', height: '100vh' }}>
+                    <NodeConfigModal isOpen={isOpen} onClose={onClose} title='demo'/>
                     <ReactFlow
                         nodes={nodes}
                         edges={edges}
