@@ -1,8 +1,8 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 
-export type ClientNodeData = Node<{ label: string }, 'client'>;
+export type DatabaseNodeData = Node<{ label: string }, 'database'>;
 
-function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
+function DatabaseNode({ data, selected }: NodeProps<DatabaseNodeData>) {
     return (
         <div
             className={`
@@ -16,15 +16,17 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
                 <div>
 
                     <img
-                        src={"../../assets/customer.png"}
+                        src={"../../assets/database.png"}
                         alt={data.label}
                         className="h-4 w-4 object-cover"
                     />
                     <div className="text-[6px] font-semibold text-gray-900 flex justify-center">
-                        Client
+                        Database
                     </div>
                 </div>
             </div>
+
+
             <Handle
                 type="source"
                 position={Position.Right}
@@ -34,4 +36,4 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
     );
 }
 
-export default ClientNode;
+export default DatabaseNode;

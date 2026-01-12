@@ -1,8 +1,8 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 
-export type ClientNodeData = Node<{ label: string }, 'client'>;
+export type CDNNodeData = Node<{ label: string }, 'cdn'>;
 
-function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
+function CDNNode({ data, selected }: NodeProps<CDNNodeData>) {
     return (
         <div
             className={`
@@ -16,22 +16,24 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
                 <div>
 
                     <img
-                        src={"../../assets/customer.png"}
+                        src={"../../assets/cdn.png"}
                         alt={data.label}
-                        className="h-4 w-4 object-cover"
+                        className="h-6 w-6 object-cover"
                     />
                     <div className="text-[6px] font-semibold text-gray-900 flex justify-center">
-                        Client
+                        CDN
                     </div>
                 </div>
             </div>
+
+
             <Handle
                 type="source"
-                position={Position.Right}
+                position={Position.Left}
                 className="!h-3 !w-3 !bg-sky-500"
             />
         </div>
     );
 }
 
-export default ClientNode;
+export default CDNNode;

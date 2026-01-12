@@ -4,7 +4,6 @@ import { Node, useReactFlow, XYPosition } from "@xyflow/react";
 import { DropAction, useDnd } from "../providers/DnDContext";
 import React, { useCallback } from "react";
 import DragGhost from "./DragGhost";
-import nodeTypes from "@/components/Nodes/NodeTypes";
 
 
 type NodeType = {
@@ -13,14 +12,14 @@ type NodeType = {
 };
 
 const SIDEBAR_NODES: NodeType[] = [
-  { type: "client", label: "Client Layer" },
-  { type: "client", label: "API Layer" },
-  { type: "client", label: "Database" },
-  { type: "client", label: "Cache" },
-  { type: "client", label: "Messaging Layer" },
-  { type: "client", label: "Load Balancer Layer" },
-  { type: "client", label: "Security Layer" },
-  // { type: "edgelayer", label: "Edge Layer" },
+  // { type: "client", label: "Client" },
+  { type: "apigateway", label: "API Gateway" },
+  { type: "database", label: "Database" },
+  { type: "cache", label: "Cache" },
+  { type: "messagequeue", label: "Messaging Queue" },
+  { type: "loadbalancer", label: "Load Balancer" },
+  { type: "cdn", label: "CDN" },
+  { type: "backendservice", label: "Backend Service" },
 ];
 
 export default function NodeSidebar() {
@@ -29,7 +28,7 @@ export default function NodeSidebar() {
   const { setNodes } = useReactFlow();
   const [type, setType] = React.useState<string | null>(null);
 
-  const addNewNode = useCallback((nodeType: string): DropAction => {
+  const addNewNode = useCallback((nodeType: string, label: string): DropAction => {
     console.log("Creating drop action for node type:", nodeType);
     return (params) => {
       if (!params || !params.position) return;
@@ -37,7 +36,7 @@ export default function NodeSidebar() {
         id: `${nodeType}-${Math.random().toString(36).substring(2, 9)}`,
         type: nodeType,
         position: params.position,
-        data: { label: `${nodeType} Node` },
+        data: { label: `${label}` },
       };
       setNodes((nds) => nds.concat(newNode));
       setType(null);
@@ -57,9 +56,8 @@ export default function NodeSidebar() {
             title={node.label}
             onPointerDown={(e) => {
               setType(node.type);
-              onDragStart(e, addNewNode(node.type))
-            }
-            }
+              onDragStart(e, addNewNode(node.type, node.label))
+            }}
           >
             <span className="text-[10px] text-gray-900 text-center">{node.label}</span>
           </div>

@@ -1,8 +1,12 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
+import React from 'react';
+import NodeConfigModal from "../Modal/NodeConfigModal";
 
-export type ClientNodeData = Node<{ label: string }, 'client'>;
+export type BackendServiceNodeData = Node<{ label: string }, 'backendservice'>;
 
-function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
+function BackendServiceNode({ data, selected }: NodeProps<BackendServiceNodeData>) {
+    const [open, setOpen] = React.useState(false);
+
     return (
         <div
             className={`
@@ -16,12 +20,12 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
                 <div>
 
                     <img
-                        src={"../../assets/customer.png"}
+                        src={"../../assets/backendservice.png"}
                         alt={data.label}
                         className="h-4 w-4 object-cover"
                     />
                     <div className="text-[6px] font-semibold text-gray-900 flex justify-center">
-                        Client
+                        Backend Service
                     </div>
                 </div>
             </div>
@@ -34,4 +38,4 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
     );
 }
 
-export default ClientNode;
+export default BackendServiceNode;

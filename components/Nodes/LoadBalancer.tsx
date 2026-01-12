@@ -1,8 +1,8 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 
-export type ClientNodeData = Node<{ label: string }, 'client'>;
+export type LoadBalancerNodeData = Node<{ label: string }, 'loadbalancer'>;
 
-function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
+function LoadBalancerNode({ data, selected }: NodeProps<LoadBalancerNodeData>) {
     return (
         <div
             className={`
@@ -11,20 +11,21 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
         ${selected ? "border-sky-500 ring-2 ring-sky-200" : "border-sky-200"}
       `}
         >
-            <div className="flex justify-center gap-3">
+            <div className="w-full">
                 {/* Image or default emoji */}
-                <div>
-
+                <div className="flex justify-center">
                     <img
-                        src={"../../assets/customer.png"}
+                        src={"../../assets/loadbalancer.png"}
                         alt={data.label}
-                        className="h-4 w-4 object-cover"
+                        className="h-6 w-6 object-cover"
                     />
-                    <div className="text-[6px] font-semibold text-gray-900 flex justify-center">
-                        Client
-                    </div>
+                </div>
+                <div className="text-[6px] font-semibold text-gray-900 flex justify-center">
+                    Load Balancer
                 </div>
             </div>
+
+
             <Handle
                 type="source"
                 position={Position.Right}
@@ -34,4 +35,4 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
     );
 }
 
-export default ClientNode;
+export default LoadBalancerNode;
