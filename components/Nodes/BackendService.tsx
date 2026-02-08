@@ -37,6 +37,21 @@ function BackendServiceNode({ data, selected }: NodeProps<BackendServiceNodeData
                     position={Position.Right}
                     className="!h-3 !w-3 !bg-sky-500"
                 />
+                <Handle
+                    type="source"
+                    position={Position.Left}
+                    className="!h-3 !w-3 !bg-sky-500"
+                />
+                <Handle
+                    type="source"
+                    position={Position.Top}
+                    className="!h-3 !w-3 !bg-sky-500"
+                />
+                <Handle
+                    type="source"
+                    position={Position.Bottom}
+                    className="!h-3 !w-3 !bg-sky-500"
+                />
             <button onClick={() => open()}>Configure</button>
             </div>
        

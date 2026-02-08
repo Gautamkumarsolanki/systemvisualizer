@@ -1,69 +1,118 @@
 "use client";
 
-import { Node, useReactFlow, XYPosition } from "@xyflow/react";
+import { Node, useReactFlow } from "@xyflow/react";
 import { DropAction, useDnd } from "../providers/DnDContext";
 import React, { useCallback } from "react";
 import DragGhost from "./DragGhost";
 
+import {
+  Database,
+  HardDrive,
+  MessageSquare,
+  Shuffle,
+  Globe,
+  Server,
+  ArrowRightLeft,
+  Shield,
+  Repeat,
+  Waypoints,
+} from "lucide-react";
 
 type NodeType = {
   type: string;
   label: string;
+  icon: React.ReactNode;
 };
 
 const SIDEBAR_NODES: NodeType[] = [
-  // { type: "client", label: "Client" },
-  { type: "apigateway", label: "API Gateway" },
-  { type: "database", label: "Database" },
-  { type: "cache", label: "Cache" },
-  { type: "messagequeue", label: "Messaging Queue" },
-  { type: "loadbalancer", label: "Load Balancer" },
-  { type: "cdn", label: "CDN" },
-  { type: "backendservice", label: "Backend Service" },
+  { type: "apigateway", label: "API Gateway", icon: <Waypoints size={18} /> },
+  { type: "database", label: "Database", icon: <Database size={18} /> },
+  { type: "cache", label: "Cache", icon: <HardDrive size={18} /> },
+  { type: "messagequeue", label: "Queue", icon: <MessageSquare size={18} /> },
+  { type: "loadbalancer", label: "Load Balancer", icon: <Shuffle size={18} /> },
+  { type: "cdn", label: "CDN", icon: <Globe size={18} /> },
+  { type: "backendservice", label: "Backend Service", icon: <Server size={18} /> },
+  { type: "proxy", label: "Proxy", icon: <ArrowRightLeft size={18} /> },
+  { type: "ratelim", label: "Rate Limiter", icon: <Shield size={18} /> },
+  { type: "reverseProxy", label: "Reverse Proxy", icon: <Repeat size={18} /> },
 ];
 
 export default function NodeSidebar() {
-
   const { isDragging, onDragStart } = useDnd();
   const { setNodes } = useReactFlow();
   const [type, setType] = React.useState<string | null>(null);
 
-  const addNewNode = useCallback((nodeType: string, label: string): DropAction => {
-    console.log("Creating drop action for node type:", nodeType);
-    return (params) => {
-      if (!params || !params.position) return;
-      const newNode: Node<{ label: string }, string> = {
-        id: `${nodeType}-${Math.random().toString(36).substring(2, 9)}`,
-        type: nodeType,
-        position: params.position,
-        data: { label: `${label}` },
+  const addNewNode = useCallback(
+    (nodeType: string, label: string): DropAction => {
+      return (params) => {
+        if (!params?.position) return;
+
+        const newNode: Node<{ label: string }, string> = {
+          id: `${nodeType}-${Math.random().toString(36).slice(2, 9)}`,
+          type: nodeType,
+          position: params.position,
+          data: { label },
+        };
+
+        setNodes((nds) => nds.concat(newNode));
+        setType(null);
       };
-      setNodes((nds) => nds.concat(newNode));
-      setType(null);
-    }
-  }, [setType, setNodes]);
+    },
+    [setNodes]
+  );
 
   return (
     <>
       {isDragging && <DragGhost type={type} />}
-      <aside className="fixed top-16 left-5 h-[60vh] w-24 flex flex-col gap-3 bg-white/90 backdrop-blur-md rounded-xl p-3 shadow-lg border border-gray-200 z-50 overflow-y-auto">
-        <h3 className="text-xs font-semibold text-gray-700 mb-2 text-center">Nodes</h3>
 
-        {SIDEBAR_NODES.map((node) => (
-          <div
-            key={node.type + node.label}
-            className="flex flex-col items-center justify-center p-2 rounded-lg hover:bg-sky-50 cursor-grab touch-none active:cursor-grabbing select-none"
-            title={node.label}
-            onPointerDown={(e) => {
-              setType(node.type);
-              onDragStart(e, addNewNode(node.type, node.label))
-            }}
-          >
-            <span className="text-[10px] text-gray-900 text-center">{node.label}</span>
-          </div>
-        ))}
+      <aside
+        className="
+          fixed top-16 left-5
+          w-60 max-h-[70vh]
+          bg-white/80 backdrop-blur-lg
+          border border-gray-200
+          rounded-2xl shadow-xl
+          flex flex-col
+          z-50
+        "
+      >
+        {/* Header */}
+        <div className="sticky top-0 px-4 py-3 border-b bg-white/70 backdrop-blur text-sm font-semibold text-gray-700">
+          Components
+        </div>
+
+        {/* Grid */}
+        <div className="grid grid-cols-2 gap-3 p-3 overflow-y-auto">
+          {SIDEBAR_NODES.map((node) => (
+            <button
+              key={node.type}
+              title={node.label}
+              onPointerDown={(e) => {
+                setType(node.type);
+                onDragStart(e, addNewNode(node.type, node.label));
+              }}
+              className="
+                flex flex-col items-center justify-center gap-2
+                p-4
+                rounded-xl
+                bg-white
+                border
+                shadow-sm
+                hover:shadow-md
+                hover:border-sky-300
+                hover:bg-sky-50
+                active:scale-95
+                cursor-grab active:cursor-grabbing
+                transition-all
+                text-xs font-medium text-gray-700
+              "
+            >
+              <div className="text-sky-600">{node.icon}</div>
+              {node.label}
+            </button>
+          ))}
+        </div>
       </aside>
     </>
   );
 }
-

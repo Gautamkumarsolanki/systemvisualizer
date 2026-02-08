@@ -6,6 +6,9 @@ import ClientNode from "./ClientNode";
 import DatabaseNode from "./Database";
 import LoadBalancerNode from "./LoadBalancer";
 import MessageQueue from './MessageQueue';
+import Proxy from "./Proxy";
+import RateLimiter from "./RateLimiter";
+import reverseProxy from "./ReverseProxy";
     
 
 const nodeTypes={
@@ -17,6 +20,9 @@ const nodeTypes={
     cache: CacheNode,
     apigateway: ApiGatewayNode,
     backendservice: BackendServiceNode,
+    proxy: Proxy,
+    ratelim : RateLimiter,
+    reverseProxy: reverseProxy,
 }
 
 export default nodeTypes;

@@ -24,13 +24,13 @@ function ApiGatewayNode({ data, selected }: NodeProps<ApiGatewayNodeData>) {
                 </div>
             </div>
             <Handle
-                type="source"
+                type="target"
                 position={Position.Left}
                 className="!h-3 !w-3 !bg-sky-500"
             />
 
             <Handle
-                type="source"
+                type="target"
                 position={Position.Right}
                 className="!h-3 !w-3 !bg-sky-500"
             />
