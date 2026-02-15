@@ -67,6 +67,8 @@ export default function NodeSidebar() {
 
       <aside
         className="
+          
+          transition-all duration-150
           fixed top-16 left-5
           w-60 max-h-[70vh]
           bg-white/80 backdrop-blur-lg
@@ -74,6 +76,7 @@ export default function NodeSidebar() {
           rounded-2xl shadow-xl
           flex flex-col
           z-50
+
         "
       >
         {/* Header */}
@@ -82,7 +85,7 @@ export default function NodeSidebar() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 gap-3 p-3 overflow-y-auto">
+        <div className="grid grid-cols-2 gap-3 p-3 overflow-y-auto bg-white border-r shadow-xl ">
           {SIDEBAR_NODES.map((node) => (
             <button
               key={node.type}
@@ -92,6 +95,10 @@ export default function NodeSidebar() {
                 onDragStart(e, addNewNode(node.type, node.label));
               }}
               className="
+                hover:-translate-y-0.5
+                hover:shadow-md
+                active:scale-95
+                transition-all duration-150
                 flex flex-col items-center justify-center gap-2
                 p-4
                 rounded-xl
@@ -107,7 +114,7 @@ export default function NodeSidebar() {
                 text-xs font-medium text-gray-700
               "
             >
-              <div className="text-sky-600">{node.icon}</div>
+              <div className="text-sky-600 ">{node.icon}</div>
               {node.label}
             </button>
           ))}
