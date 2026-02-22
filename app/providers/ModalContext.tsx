@@ -1,11 +1,14 @@
 'use client'
 
+import { NodeMetaDataType } from "@/components/Nodes/BackendService";
 import React from "react";
 
 interface ModalContext {
     isOpen: boolean;
     onClose: () => void;
-    open: () => void
+    open: (metadata: NodeMetaDataType, updateFn: ((metadata: NodeMetaDataType) => void)) => void;
+    nodeMetaData: NodeMetaDataType | null;
+    setNodeMetaData: React.Dispatch<React.SetStateAction<NodeMetaDataType | null>>;
 }
 
 
@@ -15,11 +18,18 @@ const ModalContextProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
     const onClose = () => setIsOpen(false);
-    const open = () => setIsOpen(true);
+    const [nodeMetaData, setNodeMetaData] = React.useState<NodeMetaDataType | null>(null);
+    let updateMetaDataFn: ((metadata: NodeMetaDataType) => void) | null = null;
+
+    const open = (metadata: NodeMetaDataType, updateFn: ((metadata: NodeMetaDataType) => void)) => {
+        setNodeMetaData(metadata);
+        setIsOpen(true);
+        updateMetaDataFn = updateFn;
+    };
 
 
     return (
-        <ModalContext.Provider value={{ isOpen, onClose, open }}>
+        <ModalContext.Provider value={{ isOpen, onClose, open, nodeMetaData, setNodeMetaData }}>
             {children}
         </ModalContext.Provider>
     );

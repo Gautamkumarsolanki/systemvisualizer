@@ -1,13 +1,27 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import React from 'react';
-import NodeConfigModal from "../Modal/NodeConfigModal";
+import React, { useState } from 'react';
 import { useModalContext } from "@/app/providers/ModalContext";
 
 export type BackendServiceNodeData = Node<{ label: string }, 'backendservice'>;
 
+export type NodeMetaDataType={
+    title:string,
+    left:"source" | "target" | "none",
+    right:"source" | "target" | "none",
+    top:"source" | "target" | "none",
+    bottom:"source" | "target" | "none"
+}
+
 function BackendServiceNode({ data, selected }: NodeProps<BackendServiceNodeData>) {
 
     const {open}=useModalContext();
+    const [metaData,setMetaData]=useState<NodeMetaDataType>({
+        title: "Backend Service",
+        left: "source",
+        right: "target",
+        top: "none",
+        bottom: "none"
+    })
 
     return (
         
@@ -32,27 +46,28 @@ function BackendServiceNode({ data, selected }: NodeProps<BackendServiceNodeData
                         </div>
                     </div>
                 </div>
-                <Handle
-                    type="source"
+                {metaData.right!="none" && <Handle
+                    type={metaData.right}
                     position={Position.Right}
                     className="!h-3 !w-3 !bg-sky-500"
                 />
-                <Handle
-                    type="source"
+                }
+                {metaData.left!="none" && <Handle
+                    type={metaData.left}
                     position={Position.Left}
                     className="!h-3 !w-3 !bg-sky-500"
-                />
-                <Handle
-                    type="source"
+                />}
+                {metaData.top!="none" && <Handle
+                    type={metaData.top}
                     position={Position.Top}
                     className="!h-3 !w-3 !bg-sky-500"
-                />
-                <Handle
-                    type="source"
+                />}
+                {metaData.bottom!="none" && <Handle
+                    type={metaData.bottom}
                     position={Position.Bottom}
                     className="!h-3 !w-3 !bg-sky-500"
-                />
-            <button onClick={() => open()}>Configure</button>
+                />}
+            <button onClick={() => open(metaData,setMetaData)}>Configure</button>
             </div>
        
     );

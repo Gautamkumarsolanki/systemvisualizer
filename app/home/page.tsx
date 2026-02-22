@@ -11,8 +11,8 @@ import { useModalContext } from '../providers/ModalContext';
 import NodeConfigModal from '@/components/Modal/NodeConfigModal';
 
 export default function Home() {
-    
-    const {isOpen,onClose}=useModalContext();
+
+    const { isOpen, onClose, nodeMetaData ,setNodeMetaData} = useModalContext();
 
     const { edges, nodes, setEdges, setNodes } = useSystemContext();
 
@@ -34,7 +34,7 @@ export default function Home() {
         <ReactFlowProvider>
             <DnDProvider>
                 <div className='react-flow-wrapper' style={{ width: '100vw', height: '100vh' }}>
-                    <NodeConfigModal isOpen={isOpen} onClose={onClose} title='demo'/>
+                    {nodeMetaData && <NodeConfigModal isOpen={isOpen} onClose={onClose} nodeMetaData={nodeMetaData} setNodeMetaData={setNodeMetaData} />}
                     <ReactFlow
                         nodes={nodes}
                         edges={edges}
