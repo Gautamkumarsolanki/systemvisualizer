@@ -7,7 +7,7 @@ export default function Home() {
         <h1 className="text-5xl md:text-6xl font-extrabold text-black leading-tight">
           Design Systems.
           <br />
-          <span className="text-blue-500">Visually. Clearly. Fast.</span>
+          <span className="text-blue-500">Visually. Clearly. Faster.</span>
         </h1>
 
         <p className="mt-6 text-lg md:text-xl text-white/90 max-w-2xl mx-auto">
