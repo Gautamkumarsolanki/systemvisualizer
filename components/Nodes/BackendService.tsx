@@ -1,76 +1,100 @@
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import React, { useState } from 'react';
+import React, { useState, useCallback } from "react";
 import { useModalContext } from "@/app/providers/ModalContext";
 
-export type BackendServiceNodeData = Node<{ label: string }, 'backendservice'>;
+export type BackendServiceNodeData = Node<{ label: string }, "backendservice">;
 
-export type NodeMetaDataType={
-    title:string,
-    left:"source" | "target" | "none",
-    right:"source" | "target" | "none",
-    top:"source" | "target" | "none",
-    bottom:"source" | "target" | "none"
-}
+export type ConnectorType = "source" | "target" | "none";
+
+export type NodeMetaDataType = {
+  name: string;
+  title: string;
+  left: ConnectorType;
+  right: ConnectorType;
+  top: ConnectorType;
+  bottom: ConnectorType;
+};
+
+const handlePositions = [
+  { key: "left", position: Position.Left },
+  { key: "right", position: Position.Right },
+  { key: "top", position: Position.Top },
+  { key: "bottom", position: Position.Bottom },
+] as const;
 
 function BackendServiceNode({ data, selected }: NodeProps<BackendServiceNodeData>) {
+  const { open } = useModalContext();
 
-    const {open}=useModalContext();
-    const [metaData,setMetaData]=useState<NodeMetaDataType>({
-        title: "Backend Service",
-        left: "source",
-        right: "target",
-        top: "none",
-        bottom: "none"
-    })
+  const [metaData, setMetaData] = useState<NodeMetaDataType>({
+    name: "",
+    title: "Backend Service",
+    left: "source",
+    right: "target",
+    top: "none",
+    bottom: "none",
+  });
 
-    return (
-        
-            <div
-                className={`
-        min-w-[40px] rounded-md border-1 border-blue-500 bg-white
-        p-2 shadow-md transition-all
-        ${selected ? "border-sky-500 ring-2 ring-sky-200" : "border-sky-200"}
+  const openConfig = useCallback(() => {
+    open(metaData, setMetaData);
+  }, [open, metaData]);
+
+  return (
+    <div
+      className={`
+        group relative min-w-[50px]
+        rounded-xl border bg-white px-2 py-2
+        shadow-sm transition-all duration-200
+        ${selected
+          ? "border-sky-500 ring-2 ring-sky-200 shadow-md"
+          : "border-gray-200 hover:border-sky-300"}
       `}
-            >
-                <div className="flex justify-center gap-3">
-                    {/* Image or default emoji */}
-                    <div>
+    >
+      {/* Config Icon */}
+      <button
+        onClick={openConfig}
+        className={`
+          absolute right-1 top-1
+          flex h-2 w-2 items-center justify-center
+          rounded-md text-gray-400
+          transition-all
+        `}
+      >
+        ⚙
+      </button>
 
-                        <img
-                            src={"../../assets/backendservice.png"}
-                            alt={data.label}
-                            className="h-4 w-4 object-cover"
-                        />
-                        <div className="text-[6px] font-semibold text-gray-900 flex justify-center">
-                            Backend Service
-                        </div>
-                    </div>
-                </div>
-                {metaData.right!="none" && <Handle
-                    type={metaData.right}
-                    position={Position.Right}
-                    className="!h-3 !w-3 !bg-sky-500"
-                />
-                }
-                {metaData.left!="none" && <Handle
-                    type={metaData.left}
-                    position={Position.Left}
-                    className="!h-3 !w-3 !bg-sky-500"
-                />}
-                {metaData.top!="none" && <Handle
-                    type={metaData.top}
-                    position={Position.Top}
-                    className="!h-3 !w-3 !bg-sky-500"
-                />}
-                {metaData.bottom!="none" && <Handle
-                    type={metaData.bottom}
-                    position={Position.Bottom}
-                    className="!h-3 !w-3 !bg-sky-500"
-                />}
-            <button onClick={() => open(metaData,setMetaData)}>Configure</button>
-            </div>
-       
-    );
+      {/* Content */}
+      <div className="flex flex-col items-center">
+        <img
+          src="/assets/backendservice.png"
+          alt={data.label}
+          className="h-5 w-5 object-contain"
+        />
+
+        <div className="flex flex-col">
+          <span className="text-[6px] font-semibold text-gray-800">
+            {metaData.title}
+          </span>
+        </div>
+      </div>
+
+      {/* Handles */}
+      {handlePositions.map(({ key, position }) =>
+        metaData[key] !== "none" ? (
+          <Handle
+            key={key}
+            type={metaData[key]}
+            position={position}
+            className="
+              !h-3 !w-3
+              !border-2 !border-white
+              !bg-sky-500
+              hover:!scale-110 transition-transform
+            "
+          />
+        ) : null
+      )}
+    </div>
+  );
 }
 
 export default BackendServiceNode;

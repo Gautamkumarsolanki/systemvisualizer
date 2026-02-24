@@ -1,8 +1,44 @@
+import { useModalContext } from "@/app/providers/ModalContext";
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
+import { useCallback, useState } from "react";
 
 export type LoadBalancerNodeData = Node<{ label: string }, 'loadbalancer'>;
 
+export type ConnectorType = "source" | "target" | "none";
+
+export type NodeMetaDataType = {
+    name: string;
+    title: string;
+    left: ConnectorType;
+    right: ConnectorType;
+    top: ConnectorType;
+    bottom: ConnectorType;
+};
+
+const handlePositions = [
+    { key: "left", position: Position.Left },
+    { key: "right", position: Position.Right },
+    { key: "top", position: Position.Top },
+    { key: "bottom", position: Position.Bottom },
+] as const;
+
 function LoadBalancerNode({ data, selected }: NodeProps<LoadBalancerNodeData>) {
+
+    const { open } = useModalContext();
+
+    const [metaData, setMetaData] = useState<NodeMetaDataType>({
+        name: "",
+        title: "Load Balancer",
+        left: "source",
+        right: "target",
+        top: "none",
+        bottom: "none",
+    });
+
+    const openConfig = useCallback(() => {
+        open(metaData, setMetaData);
+    }, [open, metaData]);
+
     return (
         <div
             className={`
@@ -11,26 +47,50 @@ function LoadBalancerNode({ data, selected }: NodeProps<LoadBalancerNodeData>) {
         ${selected ? "border-sky-500 ring-2 ring-sky-200" : "border-sky-200"}
       `}
         >
-            <div className="w-full">
-                {/* Image or default emoji */}
-                <div className="flex justify-center">
-                    <img
-                        src={"../../assets/loadbalancer.png"}
-                        alt={data.label}
-                        className="h-6 w-6 object-cover"
-                    />
-                </div>
-                <div className="text-[6px] font-semibold text-gray-900 flex justify-center">
-                    Load Balancer
+            {/* Config Icon */}
+            <button
+                onClick={openConfig}
+                className={`
+          absolute right-1 top-1
+          flex h-2 w-2 items-center justify-center
+          rounded-md text-gray-400
+          transition-all
+        `}
+            >
+                ⚙
+            </button>
+
+            {/* Content */}
+            <div className="flex flex-col items-center">
+                <img
+                    src="/assets/loadbalancer.png"
+                    alt={data.label}
+                    className="h-5 w-5 object-contain"
+                />
+
+                <div className="flex flex-col">
+                    <span className="text-[6px] font-semibold text-gray-800">
+                        {metaData.title}
+                    </span>
                 </div>
             </div>
 
-
-            <Handle
-                type="source"
-                position={Position.Right}
-                className="!h-3 !w-3 !bg-sky-500"
-            />
+            {/* Handles */}
+            {handlePositions.map(({ key, position }) =>
+                metaData[key] !== "none" ? (
+                    <Handle
+                        key={key}
+                        type={metaData[key]}
+                        position={position}
+                        className="
+              !h-3 !w-3
+              !border-2 !border-white
+              !bg-sky-500
+              hover:!scale-110 transition-transform
+            "
+                    />
+                ) : null
+            )}
         </div>
     );
 }
