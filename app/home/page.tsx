@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '@xyflow/react/dist/style.css';
 
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, Background, ReactFlowProvider } from '@xyflow/react';
@@ -16,6 +16,8 @@ export default function Home() {
 
     const { edges, nodes, setEdges, setNodes } = useSystemContext();
 
+    const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+
     const onNodesChange = useCallback(
         (changes: any) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
         [],
@@ -28,13 +30,64 @@ export default function Home() {
         (params: any) => setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
         [],
     );
+    
+    const onSave = useCallback(() => {
+        if (!reactFlowInstance) return;
+        const flow = reactFlowInstance.toObject();
+        localStorage.setItem("system-design-flow", JSON.stringify(flow));
+        alert("Diagram Saved!");
+    }, [reactFlowInstance]);
+
+    useEffect(() => {
+        const savedFlow = localStorage.getItem("system-design-flow");
+        if (savedFlow) {
+            const parsedFlow = JSON.parse(savedFlow);
+            setNodes(parsedFlow.nodes || []);
+            setEdges(parsedFlow.edges || []);
+
+            if (parsedFlow.viewport && reactFlowInstance) {
+            reactFlowInstance.setViewport(parsedFlow.viewport);
+}
+        }
+    }, []);
+
     console.log("Nodes in Home:", nodes);
     console.log("Edges in Home:", edges);
     return (
         <ReactFlowProvider>
             <DnDProvider>
-                <div className='react-flow-wrapper' style={{ width: '100vw', height: '100vh' }}>
-                    {nodeMetaData && <NodeConfigModal isOpen={isOpen} onClose={onClose} nodeMetaData={nodeMetaData} setNodeMetaData={setNodeMetaData} updateNodeMetaData={updateNodeMetaData}/>}
+                <div className='react-flow-wrapper relative' style={{ width: '100vw', height: '100vh' }}>
+
+                    <div className="absolute top-4 right-4 z-50 flex gap-2">
+                        <button
+                        onClick={onSave}
+                        className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                        >
+                        Save
+                        </button>
+
+                        <button
+                        onClick={() => {
+                            setNodes([]);
+                            setEdges([]);
+                            localStorage.removeItem("system-design-flow");
+                        }}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                        >
+                        Clear
+                        </button>
+                    </div>
+
+                    {nodeMetaData && (
+                        <NodeConfigModal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        nodeMetaData={nodeMetaData}
+                        setNodeMetaData={setNodeMetaData}
+                        updateNodeMetaData={updateNodeMetaData}
+                        />
+                    )}
+
                     <ReactFlow
                         nodes={nodes}
                         edges={edges}
@@ -42,11 +95,13 @@ export default function Home() {
                         onNodesChange={onNodesChange}
                         onEdgesChange={onEdgesChange}
                         onConnect={onConnect}
+                        onInit={setReactFlowInstance}
                         fitView
                     >
                         <Background color='oklch(62.3% 0.214 259.815)' />
                     </ReactFlow>
-                </div>
+
+                    </div>
                 <NodeSidebar />
             </DnDProvider>
         </ReactFlowProvider>
