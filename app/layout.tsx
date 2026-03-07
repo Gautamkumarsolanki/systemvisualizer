@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SystemContextProvider from "./providers/SystemProvider";
 import { ModalContextProvider } from "./providers/ModalContext";
-
+import Header from "@/components/ui/Header";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Header/>
         <SystemContextProvider>
           <ModalContextProvider>
             {children}
