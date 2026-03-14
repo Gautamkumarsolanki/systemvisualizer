@@ -7,7 +7,6 @@ interface DragGhostProps {
 
 export default function DragGhost({ type }: DragGhostProps) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-console.log("DragGhost rendered with type:", type);
   const onPointerMove = useCallback((event: PointerEvent) => {
     setPosition({
       x: event.clientX,

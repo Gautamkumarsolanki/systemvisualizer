@@ -9,7 +9,7 @@ export default function SystemContextProvider({ children }: { children: React.Re
 
     const [nodes, setNodes] = React.useState<Node[]>(
         [
-            { id: 'n1', type: "client", position: { x: 0, y: 0 }, data: { label: 'Client' } }
+            { id: 'client-1', type: "client", position: { x: 0, y: 0 }, data: { label: 'Client' } }
         ]
     );
 
