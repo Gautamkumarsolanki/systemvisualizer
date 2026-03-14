@@ -29,7 +29,7 @@ function DatabaseNode({ data, selected }: NodeProps<DatabaseNodeData>) {
     const [metaData, setMetaData] = useState<NodeMetaDataType>({
         name: "",
         title: "Database",
-        left: "source",
+        left: "target",
         right: "target",
         top: "none",
         bottom: "none",

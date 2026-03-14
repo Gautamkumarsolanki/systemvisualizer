@@ -9,6 +9,7 @@ import NodeSidebar from './toolbar';
 import DnDProvider from '../providers/DnDProvider';
 import { useModalContext } from '../providers/ModalContext';
 import NodeConfigModal from '@/components/Modal/NodeConfigModal';
+import AgentChat from '@/components/ui/Chat';
 
 export default function Home() {
 
@@ -103,6 +104,7 @@ export default function Home() {
 
                     </div>
                 <NodeSidebar />
+                <AgentChat/>
             </DnDProvider>
         </ReactFlowProvider>
     );
