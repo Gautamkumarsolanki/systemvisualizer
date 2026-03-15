@@ -24,6 +24,7 @@ const handlePositions = [
 
 function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
   const { open } = useModalContext();
+  console.log("Rendering ClientNode with data:", data);
 
   const [metaData, setMetaData] = useState<NodeMetaDataType>({
     name: "",
@@ -79,28 +80,27 @@ function ClientNode({ data, selected }: NodeProps<ClientNodeData>) {
         />
 
         <span className="text-[6px] font-semibold text-gray-800 dark:text-gray-200">
-          {metaData.title}
+          {data.title}
         </span>
       </div>
 
       {/* Handles */}
-      {handlePositions.map(({ key, position }) =>
-        metaData[key] !== "none" ? (
-          <Handle
-            key={key}
-            type={metaData[key]}
-            position={position}
-            className="
-              !h-3 !w-3
-              !bg-sky-500 dark:!bg-sky-400
-              !border-2
-              !border-white dark:!border-zinc-900
-              hover:!scale-110
-              transition-transform
-            "
-          />
-        ) : null
-      )}
+      {
+        data.handleMetaData && handlePositions.map(({ key, position }) => {
+          const handleType = data.handleMetaData[key];
+          if (handleType === "none") return null;
+
+          return (
+            <Handle
+              key={key}
+              type={handleType}
+              position={position}
+              id={`${key}-handle`}
+              style={{ background: "#555" }}
+            />
+          );
+        })
+      }
     </div>
   );
 }
