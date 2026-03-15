@@ -2,97 +2,110 @@ import { useModalContext } from "@/app/providers/ModalContext";
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { useCallback, useState } from "react";
 
-export type MessageQueueNodeData = Node<{ label: string }, 'messagequeue'>;
+export type MessageQueueNodeData = Node<{ label: string, title: string, handleMetaData: Record<string, ConnectorType> }, "messagequeue">;
 
 export type ConnectorType = "source" | "target" | "none";
 
 export type NodeMetaDataType = {
-    name: string;
-    title: string;
-    left: ConnectorType;
-    right: ConnectorType;
-    top: ConnectorType;
-    bottom: ConnectorType;
+  name: string;
+  title: string;
+  left: ConnectorType;
+  right: ConnectorType;
+  top: ConnectorType;
+  bottom: ConnectorType;
 };
 
 const handlePositions = [
-    { key: "left", position: Position.Left },
-    { key: "right", position: Position.Right },
-    { key: "top", position: Position.Top },
-    { key: "bottom", position: Position.Bottom },
+  { key: "left", position: Position.Left },
+  { key: "right", position: Position.Right },
+  { key: "top", position: Position.Top },
+  { key: "bottom", position: Position.Bottom },
 ] as const;
 
-function MessageQueue({ data, selected }: NodeProps<MessageQueueNodeData>) {
+function MessageQueue({
+  data,
+  selected,
+}: NodeProps<MessageQueueNodeData>) {
+  const { open } = useModalContext();
 
-    const { open } = useModalContext();
+  const [metaData, setMetaData] = useState<NodeMetaDataType>({
+    name: "",
+    title: "Message Queue",
+    left: "source",
+    right: "target",
+    top: "none",
+    bottom: "none",
+  });
 
-    const [metaData, setMetaData] = useState<NodeMetaDataType>({
-        name: "",
-        title: "Message Queue",
-        left: "source",
-        right: "target",
-        top: "none",
-        bottom: "none",
-    });
+  const openConfig = useCallback(() => {
+    open();
+  }, [open, metaData]);
 
-    const openConfig = useCallback(() => {
-        open(metaData, setMetaData);
-    }, [open, metaData]);
+  return (
+    <div
+      className={`
+        relative min-w-[60px]
+        rounded-md p-2
+        shadow-md transition-all
 
-    return (
-        <div
-            className={`
-        min-w-[60px] rounded-md border-1 border-blue-500 bg-white
-        p-2 shadow-md transition-all
-        ${selected ? "border-sky-500 ring-2 ring-sky-200" : "border-sky-200"}
+        bg-white dark:bg-zinc-900
+
+        border
+        ${
+          selected
+            ? "border-sky-500 ring-2 ring-sky-200 dark:ring-sky-800 dark:border-sky-500"
+            : "border-sky-200 dark:border-zinc-700"
+        }
       `}
-        >
-            {/* Config Icon */}
-            <button
-                onClick={openConfig}
-                className={`
+    >
+      {/* Config Icon */}
+      <button
+        onClick={openConfig}
+        className="
           absolute right-1 top-1
-          flex h-2 w-2 items-center justify-center
-          rounded-md text-gray-400
+          flex h-3 w-3 items-center justify-center
+          rounded-md
+          text-gray-400 dark:text-gray-500
+          hover:text-black dark:hover:text-white
           transition-all
-        `}
-            >
-                ⚙
-            </button>
+        "
+      >
+        ⚙
+      </button>
 
-            {/* Content */}
-            <div className="flex flex-col items-center">
-                <img
-                    src="/assets/emails.png"
-                    alt={data.label}
-                    className="h-5 w-5 object-contain"
-                />
+      {/* Content */}
+      <div className="flex flex-col items-center gap-1">
+        <img
+          src="/assets/emails.png"
+          alt={data.label}
+          className="h-5 w-5 object-contain"
+        />
 
-                <div className="flex flex-col">
-                    <span className="text-[6px] font-semibold text-gray-800">
-                        {metaData.title}
-                    </span>
-                </div>
-            </div>
+        <span className="text-[6px] font-semibold text-gray-800 dark:text-gray-200">
+          {metaData.title}
+        </span>
+      </div>
 
-            {/* Handles */}
-            {handlePositions.map(({ key, position }) =>
-                metaData[key] !== "none" ? (
-                    <Handle
-                        key={key}
-                        type={metaData[key]}
-                        position={position}
-                        className="
-                          !h-3 !w-3
-                          !border-2 !border-white
-                          !bg-sky-500
-                          hover:!scale-110 transition-transform
-                        "
-                    />
-                ) : null
-            )}
-        </div>
-    );
+      {/* Handles */}
+      {handlePositions.map(({ key, position }) =>
+        metaData[key] !== "none" ? (
+          <Handle
+            key={key}
+            type={metaData[key]}
+            position={position}
+            className="
+              !h-3 !w-3
+              !bg-sky-500 dark:!bg-sky-400
+              !border-2
+              !border-white dark:!border-zinc-900
+              hover:!scale-110
+              transition-transform
+            "
+          />
+        ) : null
+      )}
+    </div>
+  );
 }
 
 export default MessageQueue;

@@ -1,14 +1,14 @@
-import ApiGatewayNode from "./ApiGateway";
-import BackendServiceNode from "./BackendService";
-import CacheNode from "./Cache";
-import CDNNode from "./CDN";
-import ClientNode from "./ClientNode";
-import DatabaseNode from "./Database";
-import LoadBalancerNode from "./LoadBalancer";
-import MessageQueue from './MessageQueue';
-import Proxy from "./Proxy";
-import RateLimiter from "./RateLimiter";
-import reverseProxy from "./ReverseProxy";
+import ApiGatewayNode, { ApiGatewayNodeData } from "./ApiGateway";
+import BackendServiceNode, { BackendServiceNodeData } from "./BackendService";
+import CacheNode, { CacheNodeData } from "./Cache";
+import CDNNode, { CDNNodeData } from "./CDN";
+import ClientNode, { ClientNodeData } from "./ClientNode";
+import DatabaseNode, { DatabaseNodeData } from "./Database";
+import LoadBalancerNode, { LoadBalancerNodeData } from "./LoadBalancer";
+import MessageQueue, { MessageQueueNodeData } from './MessageQueue';
+import Proxy, { ProxyNodeData } from "./Proxy";
+import RateLimiter, { RateLimiterNodeData } from "./RateLimiter";
+import reverseProxy, { ReverseProxyNodeData } from "./ReverseProxy";
     
 
 const nodeTypes={
@@ -24,5 +24,7 @@ const nodeTypes={
     ratelim : RateLimiter,
     reverseProxy: reverseProxy,
 }
+
+export type CustomNodeType = ClientNodeData | MessageQueueNodeData | LoadBalancerNodeData | DatabaseNodeData | CDNNodeData | CacheNodeData | ApiGatewayNodeData | BackendServiceNodeData | ProxyNodeData | RateLimiterNodeData | ReverseProxyNodeData;
 
 export default nodeTypes;

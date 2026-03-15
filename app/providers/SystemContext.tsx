@@ -1,11 +1,12 @@
 'use client';
 import React, { createContext, useContext } from 'react';
 import { Node, Edge } from '@xyflow/react';
+import { CustomNodeType } from '@/components/Nodes/NodeTypes';
 
 export interface SystemContextProps {
-    nodes: Node[];
+    nodes: CustomNodeType[];
     edges: Edge[];
-    setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
+    setNodes: React.Dispatch<React.SetStateAction<CustomNodeType[]>>;
     setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
 }
 

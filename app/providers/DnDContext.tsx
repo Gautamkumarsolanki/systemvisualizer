@@ -21,7 +21,7 @@ export function useDnd() {
     if (!context) {
         throw new Error("useDnd must be used within a DnDProvider");
     }
-    function onDragStart(event: React.PointerEvent<HTMLDivElement>, onDrop: DropAction) {
+    function onDragStart(event: React.PointerEvent<HTMLButtonElement>, onDrop: DropAction) {
         event.preventDefault();
         (event.target as HTMLElement).setPointerCapture(event.pointerId);
         setIsDragging(true);

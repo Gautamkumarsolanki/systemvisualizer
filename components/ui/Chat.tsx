@@ -5,12 +5,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Send, Sparkles, X } from "lucide-react";
 import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_DESIGN_PROMPT } from "../AgentMetadata/SystemPrompt";
-
-const ai = new GoogleGenAI({
-	apiKey:"AIzaSyBPutaYLK2CvAJBmHjp7_OhIWnV4XiMW7o"
-});
+import MarkdownViewer from "./MarkdownView";
 
 export default function AIAgentPanel() {
+
+	const ai = new GoogleGenAI({
+		apiKey: "AIzaSyD_2YTaexPYUumwXURemUA9GaD7BsGNUPI"
+	});
 
 	const [open, setOpen] = useState(false);
 	const [input, setInput] = useState("");
@@ -31,9 +32,7 @@ export default function AIAgentPanel() {
 			systemInstruction: SYSTEM_DESIGN_PROMPT
 		},
 		history: messages
-	})
-
-	console.log("Messages:", messages);
+	});
 
 	const suggestions = [
 		"Generate microservice architecture",
@@ -48,45 +47,55 @@ export default function AIAgentPanel() {
 
 	async function sendMessage(text: string) {
 
-		const msg = text;
-		if (!msg.trim()) return;
+		if (!text.trim()) return;
 
-		setMessages(prev => [...prev, { role: "user", text: msg }] );
+		setMessages(prev => [...prev, { role: "user", text }]);
 		setInput("");
 		setTyping(true);
+
 		try {
+
 			const response = await chat.sendMessage({
-				message: msg
+				message: text
 			});
-			console.log("AI Response:", response.text);
-			setTyping(false);
-			setMessages(prev => [...prev, { role: "model", text: response.text===undefined ? "No response received." : response.text }] );
-		} catch (error) {
-			console.error("Error sending message:", error);
+
 			setTyping(false);
 			setMessages(prev => [
 				...prev,
 				{
 					role: "model",
-					text: "Sorry, there was an error processing your request."
+					text: response.text ?? "No response"
 				}
 			]);
+
+		} catch {
+
+			setTyping(false);
+
+			setMessages(prev => [
+				...prev,
+				{
+					role: "model",
+					text: "Error occurred"
+				}
+			]);
+
 		}
 	}
-
 	return (
 		<>
 			{/* Floating Button */}
 			{!open && (
 				<button
 					onClick={() => setOpen(true)}
-					className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-black text-white flex items-center justify-center shadow-lg hover:scale-105 transition"
+					className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full
+					bg-black text-white dark:bg-white dark:text-black
+					flex items-center justify-center shadow-lg hover:scale-105 transition"
 				>
 					<Bot size={22} />
 				</button>
 			)}
 
-			{/* AI Sidebar */}
 			<AnimatePresence>
 
 				{open && (
@@ -96,11 +105,17 @@ export default function AIAgentPanel() {
 						animate={{ x: 0 }}
 						exit={{ x: 400 }}
 						transition={{ duration: 0.25 }}
-						className="fixed right-0 top-0 h-full w-[420px] bg-white border-l shadow-2xl z-50 flex flex-col"
+						className="
+						fixed right-0 top-0 h-full w-[420px]
+						bg-white dark:bg-zinc-900
+						text-black dark:text-white
+						border-l dark:border-zinc-700
+						shadow-2xl z-50 flex flex-col
+						"
 					>
 
 						{/* Header */}
-						<div className="flex items-center justify-between px-5 py-4 border-b">
+						<div className="flex items-center justify-between px-5 py-4 border-b dark:border-zinc-700">
 
 							<div className="flex items-center gap-2 font-semibold">
 								<Sparkles size={18} />
@@ -109,33 +124,40 @@ export default function AIAgentPanel() {
 
 							<button
 								onClick={() => setOpen(false)}
-								className="p-1 rounded hover:bg-gray-100"
+								className="p-1 rounded hover:bg-gray-100 dark:hover:bg-zinc-800"
 							>
 								<X size={18} />
 							</button>
 
 						</div>
 
+
 						{/* Messages */}
 						<div className="flex-1 overflow-y-auto p-5 space-y-4">
 
 							{messages.map((msg, i) => (
+
 								<div
 									key={i}
-									className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
+									className={`flex ${msg.role === "user"
+										? "justify-end"
+										: "justify-start"
 										}`}
 								>
 
 									<div
-										className={`px-4 py-2 rounded-xl text-sm max-w-[80%] ${msg.role === "user"
-											? "bg-black text-white"
-											: "bg-gray-100"
-											}`}
+										className={`
+										px-4 py-2 rounded-xl text-sm max-w-[80%]
+										${msg.role === "user"
+												? "bg-black text-white dark:bg-white dark:text-black"
+												: "bg-gray-100 dark:bg-zinc-800"}
+										`}
 									>
-										{msg.text}
+										<MarkdownViewer content={msg.text} />
 									</div>
 
 								</div>
+
 							))}
 
 							{typing && (
@@ -152,34 +174,57 @@ export default function AIAgentPanel() {
 
 						</div>
 
+
 						{/* Suggestions */}
 						<div className="px-4 pb-3 flex flex-wrap gap-2">
 
 							{suggestions.map((s, i) => (
+
 								<button
 									key={i}
 									onClick={() => sendMessage(s)}
-									className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full"
+									className="
+									text-xs
+									bg-gray-100 dark:bg-zinc-800
+									hover:bg-gray-200 dark:hover:bg-zinc-700
+									px-3 py-1 rounded-full
+									"
 								>
 									{s}
 								</button>
+
 							))}
 
 						</div>
 
+
 						{/* Input */}
-						<div className="border-t p-4 flex gap-2">
+						<div className="border-t dark:border-zinc-700 p-4 flex gap-2">
 
 							<input
 								value={input}
 								onChange={(e) => setInput(e.target.value)}
 								placeholder="Create Uber System design..."
-								className="flex-1 border rounded-lg px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-black"
+								className="
+								flex-1
+								border dark:border-zinc-700
+								bg-white dark:bg-zinc-800
+								text-black dark:text-white
+								rounded-lg px-3 py-2 text-sm
+								outline-none
+								focus:ring-1 focus:ring-black dark:focus:ring-white
+								"
 							/>
 
 							<button
 								onClick={() => sendMessage(input)}
-								className="p-2 bg-black text-white rounded-lg hover:scale-105 transition"
+								className="
+								p-2
+								bg-black text-white
+								dark:bg-white dark:text-black
+								rounded-lg
+								hover:scale-105 transition
+								"
 							>
 								<Send size={16} />
 							</button>

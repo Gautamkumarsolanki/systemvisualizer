@@ -1,8 +1,20 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 export default function LoginPage() {
+  async function onSubmit(e: any){
+    e.preventDefault();
+    console.log("sdfsfd");
+    await signIn("credentials",{
+      email:'',
+      password:'',
+      redirect:false,
+      callbackUrl:'/home'
+    })
+    console.log("here");
+  }
   return (
     <div className="min-h-screen flex">
 
@@ -74,7 +86,7 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            <button
+            <button onClick={onSubmit}
               className="w-full rounded-lg bg-blue-500 text-white py-2 font-medium hover:opacity-90 transition"
             >
               Sign In
@@ -89,16 +101,7 @@ export default function LoginPage() {
             <div className="flex-1 h-px bg-gray-200"></div>
           </div>
 
-          {/* Signup */}
-          <p className="text-center text-sm text-gray-500 mt-6">
-            Don’t have an account?{" "}
-            <Link
-              href="/signup"
-              className="text-indigo-600 font-medium"
-            >
-              Sign up
-            </Link>
-          </p>
+         
 
         </div>
 

@@ -1,8 +1,8 @@
-import { Handle, Node, NodeProps, Position } from "@xyflow/react";
-import React, { useState, useCallback } from "react";
+import { Handle, Node, NodeProps, Position, useNodeConnections } from "@xyflow/react";
+import React, { useState, useCallback, use } from "react";
 import { useModalContext } from "@/app/providers/ModalContext";
 
-export type BackendServiceNodeData = Node<{ label: string }, "backendservice">;
+export type BackendServiceNodeData = Node<{ label: string, title: string, handleMetaData: Record<string, ConnectorType> }, "backendservice">;
 
 export type ConnectorType = "source" | "target" | "none";
 
@@ -35,46 +35,53 @@ function BackendServiceNode({ data, selected }: NodeProps<BackendServiceNodeData
   });
 
   const openConfig = useCallback(() => {
-    open(metaData, setMetaData);
+    open();
   }, [open, metaData]);
 
   return (
     <div
       className={`
         group relative min-w-[50px]
-        rounded-xl border bg-white px-2 py-2
-        shadow-sm transition-all duration-200
-        ${selected
-          ? "border-sky-500 ring-2 ring-sky-200 shadow-md"
-          : "border-gray-200 hover:border-sky-300"}
+        rounded-xl px-2 py-2
+        transition-all duration-200
+        shadow-sm
+
+        bg-white dark:bg-zinc-900
+
+        border
+        ${
+          selected
+            ? "border-sky-500 ring-2 ring-sky-200 dark:ring-sky-800 dark:border-sky-500 shadow-md"
+            : "border-gray-200 dark:border-zinc-700 hover:border-sky-300 dark:hover:border-sky-500"
+        }
       `}
     >
       {/* Config Icon */}
       <button
         onClick={openConfig}
-        className={`
+        className="
           absolute right-1 top-1
-          flex h-2 w-2 items-center justify-center
-          rounded-md text-gray-400
+          flex h-3 w-3 items-center justify-center
+          rounded-md
+          text-gray-400 dark:text-gray-500
+          hover:text-black dark:hover:text-white
           transition-all
-        `}
+        "
       >
         ⚙
       </button>
 
       {/* Content */}
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-1">
         <img
           src="/assets/backendservice.png"
           alt={data.label}
           className="h-5 w-5 object-contain"
         />
 
-        <div className="flex flex-col">
-          <span className="text-[6px] font-semibold text-gray-800">
-            {metaData.title}
-          </span>
-        </div>
+        <span className="text-[6px] font-semibold text-gray-800 dark:text-gray-200">
+          {metaData.title}
+        </span>
       </div>
 
       {/* Handles */}
@@ -86,9 +93,11 @@ function BackendServiceNode({ data, selected }: NodeProps<BackendServiceNodeData
             position={position}
             className="
               !h-3 !w-3
-              !border-2 !border-white
-              !bg-sky-500
-              hover:!scale-110 transition-transform
+              !bg-sky-500 dark:!bg-sky-400
+              !border-2
+              !border-white dark:!border-zinc-900
+              hover:!scale-110
+              transition-transform
             "
           />
         ) : null

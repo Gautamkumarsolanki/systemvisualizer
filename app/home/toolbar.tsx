@@ -17,6 +17,7 @@ import {
   Repeat,
   Waypoints,
 } from "lucide-react";
+import { ConnectorType } from "@/components/Nodes/ReverseProxy";
 
 type NodeType = {
   type: string;
@@ -38,8 +39,10 @@ const SIDEBAR_NODES: NodeType[] = [
 ];
 
 export default function NodeSidebar() {
+
   const { isDragging, onDragStart } = useDnd();
   const { setNodes } = useReactFlow();
+
   const [type, setType] = React.useState<string | null>(null);
 
   const addNewNode = useCallback(
@@ -47,11 +50,11 @@ export default function NodeSidebar() {
       return (params) => {
         if (!params?.position) return;
 
-        const newNode: Node<{ label: string }, string> = {
+        const newNode: Node<{ label: string, title: string , handleMetaData: Record<string, ConnectorType> }, string> = {
           id: `${nodeType}-${Math.random().toString(36).slice(2, 9)}`,
           type: nodeType,
           position: params.position,
-          data: { label },
+          data: { label, title: "", handleMetaData: {"left": "source", "right": "target", "top": "none", "bottom": "none"} },
         };
 
         setNodes((nds) => nds.concat(newNode));
@@ -67,26 +70,53 @@ export default function NodeSidebar() {
 
       <aside
         className="
-          
-          transition-all duration-150
-          fixed top-16 left-5
-          w-60 max-h-[70vh]
-          bg-white/80 backdrop-blur-lg
-          border border-gray-200
-          rounded-2xl shadow-xl
-          flex flex-col
-          z-50
+        fixed top-16 left-5
+        w-60 max-h-[70vh]
+        rounded-2xl
+        shadow-xl
+        flex flex-col
+        z-50
+        transition-all duration-150
 
+        bg-white/80 dark:bg-zinc-900/80
+        backdrop-blur-lg
+
+        border border-gray-200 dark:border-zinc-700
         "
       >
+
         {/* Header */}
-        <div className="sticky top-0 px-4 py-3 border-b bg-white/70 backdrop-blur text-sm font-semibold text-gray-700">
+        <div
+          className="
+          sticky top-0
+          px-4 py-3
+          text-sm font-semibold
+
+          border-b border-gray-200 dark:border-zinc-700
+
+          bg-white/70 dark:bg-zinc-900/70
+          backdrop-blur
+
+          text-gray-700 dark:text-gray-200
+          "
+        >
           Components
         </div>
 
+
         {/* Grid */}
-        <div className="grid grid-cols-2 gap-3 p-3 overflow-y-auto bg-white border-r shadow-xl ">
+        <div
+          className="
+          grid grid-cols-2 gap-3
+          p-3 overflow-y-auto
+
+          bg-white dark:bg-zinc-900
+          border-r border-gray-200 dark:border-zinc-800
+          "
+        >
+
           {SIDEBAR_NODES.map((node) => (
+
             <button
               key={node.type}
               title={node.label}
@@ -95,30 +125,43 @@ export default function NodeSidebar() {
                 onDragStart(e, addNewNode(node.type, node.label));
               }}
               className="
-                hover:-translate-y-0.5
-                hover:shadow-md
-                active:scale-95
-                transition-all duration-150
-                flex flex-col items-center justify-center gap-2
-                p-4
-                rounded-xl
-                bg-white
-                border
-                shadow-sm
-                hover:shadow-md
-                hover:border-sky-300
-                hover:bg-sky-50
-                active:scale-95
-                cursor-grab active:cursor-grabbing
-                transition-all
-                text-xs font-medium text-gray-700
+              flex flex-col items-center justify-center gap-2
+              p-4 rounded-xl
+
+              text-xs font-medium
+
+              transition-all duration-150
+
+              cursor-grab active:cursor-grabbing
+
+              bg-white dark:bg-zinc-800
+              border border-gray-200 dark:border-zinc-700
+
+              text-gray-700 dark:text-gray-200
+
+              shadow-sm
+              hover:shadow-md
+
+              hover:border-sky-300 dark:hover:border-sky-500
+              hover:bg-sky-50 dark:hover:bg-zinc-700
+
+              active:scale-95
+              hover:-translate-y-0.5
               "
             >
-              <div className="text-sky-600 ">{node.icon}</div>
+
+              <div className="text-sky-600 dark:text-sky-400">
+                {node.icon}
+              </div>
+
               {node.label}
+
             </button>
+
           ))}
+
         </div>
+
       </aside>
     </>
   );

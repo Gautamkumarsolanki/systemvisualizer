@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/genai": "^1.45.0",
+    "@prisma/client": "^7.5.0",
     "@xyflow/react": "^12.10.0",
     "framer-motion": "^12.36.0",
     "lucide-react": "^0.563.0",
@@ -17,16 +18,22 @@
     "next-auth": "^4.24.13",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
     "react-resizable-panels": "^4.7.2",
-    "react-rnd": "^10.5.3"
+    "react-rnd": "^10.5.3",
+    "rehype-highlight": "^7.0.2",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "prisma": "^7.5.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

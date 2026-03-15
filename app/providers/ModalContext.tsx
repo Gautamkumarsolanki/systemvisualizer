@@ -1,15 +1,14 @@
 'use client'
 
-import { NodeMetaDataType } from "@/components/Nodes/BackendService";
+import { CustomNodeType } from "@/components/Nodes/NodeTypes";
 import React, { useEffect, useState } from "react";
 
 interface ModalContext {
     isOpen: boolean;
     onClose: () => void;
-    open: (metadata: NodeMetaDataType, updateFn: ((metadata: NodeMetaDataType) => void)) => void;
-    updateNodeMetaData: () => void;
-    nodeMetaData: NodeMetaDataType | null;
-    setNodeMetaData: React.Dispatch<React.SetStateAction<NodeMetaDataType | null>>;
+    selectedNode: CustomNodeType | null;
+    setSelectedNode: React.Dispatch<React.SetStateAction<CustomNodeType | null>>;
+    open: () => void;
 }
 
 
@@ -19,32 +18,14 @@ const ModalContextProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
     const onClose = () => setIsOpen(false);
-    const [nodeMetaData, setNodeMetaData] = React.useState<NodeMetaDataType | null>(null);
-    const [updateMetaDataFn,setUpdateMetaDataFn]=useState<((metadata: NodeMetaDataType) => void) | null>(null);
-
-    const updateNodeMetaData = () => {
-        if (updateMetaDataFn && nodeMetaData) {
-            updateMetaDataFn(nodeMetaData);
-        }
-        onClose();
-    };
-
-    useEffect(() => {
-        if(!isOpen){
-            setNodeMetaData(null);
-            setUpdateMetaDataFn(null);
-        }
-    },[isOpen]);
-
-    const open = (metadata: NodeMetaDataType, updateFn: ((metadata: NodeMetaDataType) => void)) => {
-        setNodeMetaData(metadata);
+    const [selectedNode, setSelectedNode] = React.useState<CustomNodeType | null>(null);
+    const open = () => {
         setIsOpen(true);
-        setUpdateMetaDataFn(() => updateFn);
-    };
+    }
 
 
     return (
-        <ModalContext.Provider value={{ isOpen, onClose, open, nodeMetaData, setNodeMetaData,updateNodeMetaData }}>
+        <ModalContext.Provider value={{ isOpen, onClose, selectedNode, setSelectedNode, open }}>
             {children}
         </ModalContext.Provider>
     );
