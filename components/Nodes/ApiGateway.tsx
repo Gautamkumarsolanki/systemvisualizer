@@ -1,10 +1,25 @@
-import { Node, NodeProps } from "@xyflow/react";
+import { useModalContext } from "@/app/providers/ModalContext";
+import { Handle, Node, NodeProps, Position } from "@xyflow/react";
+import { useCallback } from "react";
 
 export type ApiGatewayNodeData = Node<{ label: string, title: string, handleMetaData: Record<string, ConnectorType> }, "apigateway">;
 
 export type ConnectorType = "source" | "target" | "none";
 
+const handlePositions = [
+	{ key: "left", position: Position.Left },
+	{ key: "right", position: Position.Right },
+	{ key: "top", position: Position.Top },
+	{ key: "bottom", position: Position.Bottom },
+] as const;
+
 function ApiGatewayNode({ data, selected }: NodeProps<ApiGatewayNodeData>) {
+
+	const { open } = useModalContext();
+
+	const openConfig = useCallback(() => {
+		open();
+	}, [open]);
 
 	return (
 		<div
@@ -27,6 +42,20 @@ function ApiGatewayNode({ data, selected }: NodeProps<ApiGatewayNodeData>) {
 				}
       `}
 		>
+			{/* Config Icon */}
+			<button
+				onClick={openConfig}
+				className="
+          absolute right-1 top-1
+          flex h-3 w-3 items-center justify-center
+          rounded-md
+          text-gray-400 dark:text-gray-500
+          hover:text-black dark:hover:text-white
+          transition-all
+        "
+			>
+				⚙
+			</button>
 			{/* Content */}
 			<div className="flex flex-col items-center gap-1">
 				<img
@@ -45,6 +74,24 @@ function ApiGatewayNode({ data, selected }: NodeProps<ApiGatewayNodeData>) {
 					{data.label}
 				</span>
 			</div>
+
+			{/* Handles */}
+			{
+				data.handleMetaData && handlePositions.map(({ key, position }) => {
+					const handleType = data.handleMetaData[key];
+					if (handleType === "none") return null;
+
+					return (
+						<Handle
+							key={key}
+							type={handleType}
+							position={position}
+							id={`${key}-handle`}
+							style={{ background: "#555" }}
+						/>
+					);
+				})
+			}
 		</div>
 	);
 }

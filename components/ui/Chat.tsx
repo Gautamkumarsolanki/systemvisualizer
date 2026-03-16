@@ -10,8 +10,8 @@ import MarkdownViewer from "./MarkdownView";
 export default function AIAgentPanel() {
 
 	const ai = new GoogleGenAI({
-		apiKey: "AIzaSyD_2YTaexPYUumwXURemUA9GaD7BsGNUPI"
-	});
+		apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY
+	});	
 
 	const [open, setOpen] = useState(false);
 	const [input, setInput] = useState("");

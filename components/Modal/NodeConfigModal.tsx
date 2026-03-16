@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { CustomNodeType } from "../Nodes/NodeTypes";
 import { useNodeConnections, useReactFlow, useUpdateNodeInternals } from "@xyflow/react";
+import { on } from "events";
 
 interface ModalProps {
 	isOpen: boolean;
@@ -39,6 +40,7 @@ const NodeConfigModal = ({
 		};
 		setNodes((nodes) => nodes.map((node) => (node.id === updatedNode.id ? updatedNode : node)));
 		updateNodeInternals(selectedNode.id);
+		onClose();
 	}, [selectedNode, title, handles]);
 	
 	if (!isOpen || !selectedNode) return null;
