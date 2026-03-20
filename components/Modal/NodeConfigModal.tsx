@@ -1,8 +1,7 @@
 'use client';
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { CustomNodeType } from "../Nodes/NodeTypes";
-import { useNodeConnections, useReactFlow, useUpdateNodeInternals } from "@xyflow/react";
-import { on } from "events";
+import { useReactFlow, useUpdateNodeInternals } from "@xyflow/react";
 
 interface ModalProps {
 	isOpen: boolean;
@@ -42,7 +41,7 @@ const NodeConfigModal = ({
 		updateNodeInternals(selectedNode.id);
 		onClose();
 	}, [selectedNode, title, handles]);
-	
+
 	if (!isOpen || !selectedNode) return null;
 
 	console.log(handles);

@@ -21,8 +21,8 @@ const nodeTypes={
     apigateway: ApiGatewayNode,
     backendservice: BackendServiceNode,
     proxy: Proxy,
-    ratelim : RateLimiter,
-    reverseProxy: reverseProxy,
+    ratelimiter: RateLimiter,
+    reverseproxy: reverseProxy,
 }
 
 export type CustomNodeType = ClientNodeData | MessageQueueNodeData | LoadBalancerNodeData | DatabaseNodeData | CDNNodeData | CacheNodeData | ApiGatewayNodeData | BackendServiceNodeData | ProxyNodeData | RateLimiterNodeData | ReverseProxyNodeData;

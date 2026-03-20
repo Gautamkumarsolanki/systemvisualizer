@@ -58,6 +58,7 @@ export default function Home() {
         setSelectedNode(node);
     }
 
+
     return (
         <ReactFlowProvider>
             <DnDProvider>
@@ -107,7 +108,7 @@ export default function Home() {
 
                 </div>
                 <NodeSidebar />
-                <AgentChat />
+                <AgentChat setNode={setNodes} setEdges={setEdges} />
             </DnDProvider>
         </ReactFlowProvider>
     );

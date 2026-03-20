@@ -2,7 +2,7 @@ import { useModalContext } from "@/app/providers/ModalContext";
 import { Handle, Node, NodeProps, Position } from "@xyflow/react";
 import { useCallback, useState } from "react";
 
-export type ReverseProxyNodeData = Node<{ label: string, title: string, handleMetaData: Record<string, ConnectorType> }, "reverseProxy">;
+export type ReverseProxyNodeData = Node<{ label: string, title: string, handleMetaData: Record<string, ConnectorType> }, "reverseproxy">;
 
 export type ConnectorType = "source" | "target" | "none";
 
