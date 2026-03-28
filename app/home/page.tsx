@@ -10,8 +10,12 @@ import DnDProvider from '../providers/DnDProvider';
 import { useModalContext } from '../providers/ModalContext';
 import NodeConfigModal from '@/components/Modal/NodeConfigModal';
 import AgentChat from '@/components/ui/Chat';
+import { useCheckOrCreateUser } from '@/lib/hooks/useCheckOrCreateUser';
 
 export default function Home() {
+
+    const { user, loading, error } = useCheckOrCreateUser();
+    console.log(user, loading, error);
 
     const { isOpen, onClose, setSelectedNode, selectedNode } = useModalContext();
 

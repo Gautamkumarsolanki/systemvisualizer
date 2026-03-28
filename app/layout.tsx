@@ -4,6 +4,8 @@ import "./globals.css";
 import SystemContextProvider from "./providers/SystemProvider";
 import { ModalContextProvider } from "./providers/ModalContext";
 import Header from "@/components/ui/Header";
+import Providers from "./providers/SessionProvider";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,17 +26,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header/>
-        <SystemContextProvider>
-          <ModalContextProvider>
-            {children}
-          </ModalContextProvider>
-        </SystemContextProvider>
+        <Providers>
+          <Header />
+          <SystemContextProvider>
+            <ModalContextProvider>
+              {children}
+            </ModalContextProvider>
+          </SystemContextProvider>
+        </Providers>
       </body>
     </html>
   );

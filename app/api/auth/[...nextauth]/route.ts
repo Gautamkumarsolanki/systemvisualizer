@@ -1,21 +1,14 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
 
 const handler = NextAuth({
-    providers: [CredentialsProvider({
-        name: 'Email',
-        credentials: {
-            email: { label:"Email", placeholder: "you@example.com" },
-            password: { label: "Password", placeholder: "••••••••" }
-        },
-        async authorize(credentials) {
-            console.log(credentials);
-            return null
-        }
-    })],
-    pages: {
-        signIn: '/login'
-    }
-});
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+})
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST }

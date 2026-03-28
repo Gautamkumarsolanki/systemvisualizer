@@ -71,6 +71,14 @@ export default function AIAgentPanel({ setNode, setEdges }: AIAgentPanelProps) {
 		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages, typing]);
 
+	async function getGraphData() {
+		// Function to extract graph data from messages
+		const graphData = messages.find(msg => msg.role === "model")?.text;
+		if (graphData) {
+			extractAndSetGraph(graphData);
+		}
+	}
+
 	async function sendMessage(text: string) {
 
 		stopRef.current = false;
