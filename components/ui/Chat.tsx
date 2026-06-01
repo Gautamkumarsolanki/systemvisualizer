@@ -42,7 +42,7 @@ export default function AIAgentPanel({ setNode, setEdges }: AIAgentPanelProps) {
 	const [messages, setMessages] = useState([
 		{
 			role: "model",
-			text: "Hi Gautam 👋 I can help generate system design flows."
+			text: "Hi User 👋 I can help generate system design flows."
 		}
 	]);
 
